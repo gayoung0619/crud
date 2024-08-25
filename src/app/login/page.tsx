@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { useEffect } from "react";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
@@ -11,45 +10,29 @@ import {
   Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { useForm } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
 
 const LoginForm = ({ onChange: onChangeType }: any) => {
   const {
-    register,
+    control,
     handleSubmit,
-    setValue,
-    trigger,
     formState: { errors },
-  } = useForm();
-  const refreshPage = () => window.location.reload();
+  } = useForm({
+    defaultValues: {
+      id: "",
+      password: "", // Ensure this matches the field name
+    },
+  });
 
-  /* input validation */
-  useEffect(() => {
-    register("admin_id", {
-      required: true,
-      // pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-    });
-    register("password", {
-      required: true,
-      minLength: 4,
-    });
-  }, [register]);
-
-  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setValue(name, value);
-    await trigger(name.toString());
-  };
-
-  const onSubmit = () => {
-    console.log("submit!");
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
     <Wrapper>
       <Box sx={customStyle}>
-        <ValidatorForm onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Card style={{ padding: "40px" }}>
             <Typography
               sx={{ fontSize: "26px" }}
@@ -63,20 +46,52 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
             <CardContent style={{ padding: "0" }}>
               <Grid container spacing={2} mt={1}>
                 <Grid item xs={12}>
-                  <TextField
-                    label="아이디"
-                    fullWidth
-                    variant="outlined"
-                    onChange={onChange}
+                  <Controller
+                    name="id"
+                    control={control}
+                    rules={{
+                      required: "ID is required.",
+                      pattern: {
+                        value: /^[a-zA-Z0-9\s,.'-]{5,}$/,
+                        message:
+                          "Invalid ID format. Please ensure it is valid.",
+                      },
+                    }}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        fullWidth
+                        label="아이디"
+                        value={field.value}
+                        onChange={field.onChange}
+                        error={fieldState.error !== undefined}
+                        helperText={
+                          fieldState.error && fieldState.error.message
+                        }
+                      />
+                    )}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    label="패스워드"
-                    type="password"
-                    fullWidth
-                    variant="outlined"
-                    onChange={onChange}
+                  <Controller
+                    required={true}
+                    name="password" // Ensure this matches the field name
+                    control={control}
+                    rules={{
+                      required: "PW is required.",
+                    }}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        fullWidth
+                        type="password"
+                        label="패스워드"
+                        value={field.value}
+                        onChange={field.onChange}
+                        error={fieldState.error !== undefined}
+                        helperText={
+                          fieldState.error && fieldState.error.message
+                        }
+                      />
+                    )}
                   />
                 </Grid>
               </Grid>
@@ -97,18 +112,14 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
               </Grid>
             </CardActions>
           </Card>
-        </ValidatorForm>
+        </form>
       </Box>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.body`
+const Wrapper = styled.div`
   background-color: rgba(249, 249, 249, 1);
-`;
-
-const ValidatorForm = styled.div`
-  padding: 40px;
 `;
 
 const customStyle = {
