@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { LoadingButton } from "@mui/lab";
 import {
   Box,
@@ -12,8 +13,23 @@ import {
 import TextField from "@mui/material/TextField";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { authPost } from "@/app/_api/auth";
 
 const LoginForm = ({ onChange: onChangeType }: any) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: authPost,
+
+    onSuccess({ data }) {
+      const { token, ...user } = data;
+      queryClient.setQueryData(["authkey"], user);
+      localStorage.setItem("TOKEN", token);
+      router.push("/");
+    },
+  });
+
   const {
     control,
     handleSubmit,
@@ -26,7 +42,10 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    mutate({
+      id: data.id,
+      password: data.password,
+    });
   };
 
   return (
