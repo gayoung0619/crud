@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
+import { boardFetch } from "@/app/_api/board";
 
 const dummyData = [];
 const CustomerList = () => {
@@ -29,6 +30,15 @@ const CustomerList = () => {
     "이메일",
     "삭제",
   ];
+
+  const {
+    data: boardData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["board"],
+    queryFn: boardFetch,
+  });
 
   return (
     <>
@@ -51,8 +61,9 @@ const CustomerList = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {dummyData.map((item) => (
+                      {boardData?.data.map((item) => (
                         <TableRow
+                          key={item.id}
                           sx={{
                             cursor: "pointer",
                           }}
