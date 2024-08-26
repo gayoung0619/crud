@@ -15,6 +15,10 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authPost } from "@/app/_api/auth";
+type dataProps = {
+  id: string;
+  password: string;
+};
 
 const LoginForm = ({ onChange: onChangeType }: any) => {
   const router = useRouter();
@@ -45,7 +49,7 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: dataProps) => {
     mutate({
       id: data.id,
       password: data.password,
@@ -96,7 +100,6 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
                 </Grid>
                 <Grid item xs={12}>
                   <Controller
-                    required={true}
                     name="password" // Ensure this matches the field name
                     control={control}
                     rules={{

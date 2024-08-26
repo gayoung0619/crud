@@ -14,9 +14,10 @@ export default function RootLayout({
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <AuthToken />
-        <ReactQueryDevtools initialIsOpen={false} />
-        <div className="content">{children}</div>
+        <AuthToken>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <div className="content">{children}</div>
+        </AuthToken>
       </QueryClientProvider>
     </>
   );
