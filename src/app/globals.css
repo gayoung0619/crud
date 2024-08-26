@@ -1,3 +1,6 @@
+body {
+  background-color: rgba(249, 249, 249, 1);
+}
 /* box-sizing 규칙을 명시합니다. */
 *,
 *::before,

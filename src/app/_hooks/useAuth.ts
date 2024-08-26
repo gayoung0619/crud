@@ -19,6 +19,7 @@ export const useAuth = (): AuthData => {
       setToken(storedToken);
     }
   }, [token]);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["authKey"],
     queryFn: () => authFetch(token ?? ""),
