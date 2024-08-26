@@ -28,6 +28,10 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
       localStorage.setItem("TOKEN", token);
       router.push("/");
     },
+
+    onError() {
+      alert("비밀번호와 아이디가 틀렸습니다! 다시입력해주세요.");
+    },
   });
 
   const {
