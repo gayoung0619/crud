@@ -26,7 +26,7 @@ const LoginForm = ({ onChange: onChangeType }: any) => {
       const { token, ...user } = data;
       queryClient.setQueryData(["authkey"], user);
       localStorage.setItem("TOKEN", token);
-      router.push("/");
+      router.push("/list");
     },
 
     onError() {

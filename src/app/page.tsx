@@ -1,6 +1,11 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  return <div className={styles.txt}>내가 또, 하면 한다!!!</div>;
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/list");
+  }, [router]);
 }
