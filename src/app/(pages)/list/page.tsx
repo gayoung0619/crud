@@ -17,53 +17,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 
-const dummyData = [
-  {
-    id: 1,
-    name: "권수빈",
-    age: "15",
-    sex: "남",
-    university: "대학교",
-    phone: "010-0000-0000",
-    email: "abcd@naver.com",
-  },
-  {
-    id: 2,
-    name: "양가영",
-    age: "29",
-    sex: "여",
-    university: "대학교",
-    phone: "010-1111-2222",
-    email: "abcd@naver.com",
-  },
-  {
-    id: 3,
-    name: "권수빈",
-    age: "15",
-    sex: "남",
-    university: "대학교",
-    phone: "010-0000-0000",
-    email: "abcd@naver.com",
-  },
-  {
-    id: 4,
-    name: "권수빈",
-    age: "15",
-    sex: "남",
-    university: "대학교",
-    phone: "010-0000-0000",
-    email: "abcd@naver.com",
-  },
-  {
-    id: 5,
-    name: "권수빈",
-    age: "15",
-    sex: "남",
-    university: "대학교",
-    phone: "010-0000-0000",
-    email: "abcd@naver.com",
-  },
-];
+const dummyData = [];
 const CustomerList = () => {
   const tableColumns = [
     "No",
@@ -78,14 +32,16 @@ const CustomerList = () => {
 
   return (
     <>
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, mt: 15 }}>
         <Container maxWidth={false}>
           <Box mt={3}>
             <Card>
               <CardContent>
                 <TableContainer>
                   <Table>
-                    <TableHead>
+                    <TableHead
+                      style={{ backgroundColor: "rgba(249, 249, 249, 1)" }}
+                    >
                       <TableRow>
                         {tableColumns.map((column) => (
                           <TableCell align="center" key={column}>
@@ -116,7 +72,7 @@ const CustomerList = () => {
                               size="small"
                               color="info"
                             >
-                              button
+                              삭제
                             </Button>
                           </TableCell>
                         </TableRow>
