@@ -5,8 +5,6 @@ import {
   Card,
   CardContent,
   Container,
-  LinearProgress,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -15,10 +13,9 @@ import {
   TableRow,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import { boardFetch } from "@/app/_api/board";
+import React from "react";
+import { boardDelete, boardFetch } from "@/app/_api/board";
 
-const dummyData = [];
 const CustomerList = () => {
   const tableColumns = [
     "No",
@@ -31,14 +28,18 @@ const CustomerList = () => {
     "삭제",
   ];
 
-  const {
-    data: boardData,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: boardData } = useQuery({
     queryKey: ["board"],
     queryFn: boardFetch,
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: (boardId: number) => boardDelete(boardId),
+  });
+
+  const onDelete = (id: number) => {
+    deleteMutation.mutate(id);
+  };
 
   return (
     <>
@@ -61,7 +62,7 @@ const CustomerList = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {boardData?.data.map((item) => (
+                      {boardData?.data.map((item: any) => (
                         <TableRow
                           key={item.id}
                           sx={{
@@ -82,6 +83,10 @@ const CustomerList = () => {
                               variant="contained"
                               size="small"
                               color="info"
+                              onClick={() => {
+                                alert("삭제됨");
+                                onDelete(item.id);
+                              }}
                             >
                               삭제
                             </Button>
