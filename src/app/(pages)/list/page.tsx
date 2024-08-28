@@ -114,8 +114,8 @@ const CustomerList = () => {
     boardResponse
   >({
     mutationFn: (form) => boardWrite(form),
-    onSuccess: () => {
-      console.log("Data successfully submitted!");
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["board"] });
     },
     onError: (error) => {
       console.error("Error submitting data:", error);
