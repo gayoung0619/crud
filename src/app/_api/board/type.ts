@@ -5,5 +5,5 @@ export type boardResponse = {
   sex: string;
   university: string;
   phone: string;
-  email: string;
+  mail: string;
 };

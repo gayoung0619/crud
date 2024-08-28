@@ -26,15 +26,8 @@ import {
   boardUpdate,
   boardInfo,
 } from "@/app/_api/board";
-
-type FormData = {
-  name: string;
-  age: string;
-  sex: string;
-  university: string;
-  phone: string;
-  mail: string;
-};
+import { AxiosResponse } from "axios";
+import { boardResponse } from "@/app/_api/board/type";
 
 const CustomerList = () => {
   const tableColumns = [
@@ -89,7 +82,7 @@ const CustomerList = () => {
     control,
     formState: { errors },
     reset,
-  } = useForm<FormData>();
+  } = useForm<boardResponse>();
 
   const queryClient = useQueryClient();
 
@@ -101,12 +94,12 @@ const CustomerList = () => {
 
   // delete
   const deleteMutation = useMutation({
-    mutationFn: (boardId: number) => boardDelete(boardId),
+    mutationFn: (boardId: string) => boardDelete(boardId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["board"] });
     },
   });
-  const onDelete = (id: number) => {
+  const onDelete = (id: string) => {
     if (window.confirm("게시물을 삭제하시겠습니까?")) {
       deleteMutation.mutate(id);
     } else {
@@ -115,7 +108,11 @@ const CustomerList = () => {
   };
 
   // post
-  const postMutation = useMutation({
+  const postMutation = useMutation<
+    AxiosResponse<boardResponse>,
+    Error,
+    boardResponse
+  >({
     mutationFn: (form) => boardWrite(form),
     onSuccess: () => {
       console.log("Data successfully submitted!");
@@ -124,7 +121,7 @@ const CustomerList = () => {
       console.error("Error submitting data:", error);
     },
   });
-  const onSubmitForm = (data) => {
+  const onSubmitForm = (data: boardResponse) => {
     // console.log("Submitted Data:", data);
     setOpenPopup(false);
     postMutation.mutate(data);
@@ -153,7 +150,7 @@ const CustomerList = () => {
   }, [isSuccess, info, reset]);
 
   const updateMutation = useMutation({
-    mutationFn: (form: FormData) => boardUpdate(updatedId, form),
+    mutationFn: (form: boardResponse) => boardUpdate(updatedId, form),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["board"] });
       handleClosePopup2();
@@ -163,7 +160,7 @@ const CustomerList = () => {
     },
   });
 
-  const onUpdateForm = (data: FormData) => {
+  const onUpdateForm = (data: boardResponse) => {
     alert("수정되었습니다.");
     updateMutation.mutate(data);
   };
@@ -475,7 +472,7 @@ const CustomerList = () => {
                             cursor: "pointer",
                           }}
                         >
-                          <TableCell align="center" mt={2}>
+                          <TableCell align="center" sx={{ mt: 2 }}>
                             {item.id}
                           </TableCell>
                           <TableCell align="center">{item.name}</TableCell>
