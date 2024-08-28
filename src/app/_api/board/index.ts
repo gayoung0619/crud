@@ -15,8 +15,13 @@ export const boardWrite = async (
   return await axios.post("http://localhost:3001/board", form);
 };
 
-export const boardPatch = async (
-  form: boardResponse,
+export const boardInfo = async (id): Promise<AxiosResponse> => {
+  return await axios.get(`http://localhost:3001/board/${id}`);
+};
+
+export const boardUpdate = async (
+  id: string,
+  form: FormData,
 ): Promise<AxiosResponse> => {
-  return await axios.patch("http://localhost:3001/board", form);
+  return await axios.patch(`http://localhost:3001/board/${id}`, form);
 };

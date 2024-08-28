@@ -18,8 +18,14 @@ import {
 import Modal from "@mui/material/Modal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
-import React, { useState } from "react";
-import { boardDelete, boardFetch, boardWrite } from "@/app/_api/board";
+import React, { useEffect, useState } from "react";
+import {
+  boardDelete,
+  boardFetch,
+  boardWrite,
+  boardUpdate,
+  boardInfo,
+} from "@/app/_api/board";
 
 type FormData = {
   name: string;
@@ -44,6 +50,8 @@ const CustomerList = () => {
   ];
 
   const [openPopup, setOpenPopup] = useState<boolean>(false);
+  const [openPopup2, setOpenPopup2] = useState<boolean>(false);
+  const [updatedId, setUpdatedId] = useState("");
 
   const handleOpenPopup = () => {
     setOpenPopup(true);
@@ -51,6 +59,16 @@ const CustomerList = () => {
 
   const handleClosePopup = () => {
     setOpenPopup(false);
+  };
+
+  const handleOpenPopup2 = (id: any) => {
+    setUpdatedId(id);
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup2 = () => {
+    setOpenPopup2(false);
+    setUpdatedId("");
   };
 
   // modal style
@@ -70,6 +88,7 @@ const CustomerList = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<FormData>();
 
   const queryClient = useQueryClient();
@@ -105,14 +124,47 @@ const CustomerList = () => {
       console.error("Error submitting data:", error);
     },
   });
-
   const onSubmitForm = (data) => {
     // console.log("Submitted Data:", data);
     setOpenPopup(false);
     postMutation.mutate(data);
   };
 
-  // put or patch
+  // Update mutation
+  const { data: info, isSuccess } = useQuery({
+    queryKey: ["boardInfo", updatedId],
+    queryFn: () => boardInfo(updatedId),
+    enabled: !!updatedId,
+  });
+
+  console.log(info);
+
+  useEffect(() => {
+    if (isSuccess && info) {
+      reset({
+        name: info.data?.name || "",
+        age: info.data?.age || "",
+        sex: info.data?.sex || "",
+        university: info.data?.university || "",
+        phone: info.data?.phone || "",
+        mail: info.data?.mail || "",
+      });
+    }
+  }, [isSuccess, info, reset]);
+
+  const updateMutation = useMutation({
+    mutationFn: (form: FormData) => boardUpdate(updatedId, form),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["board"] });
+    },
+    onError: (error) => {
+      console.error("Error updating data:", error);
+    },
+  });
+
+  const onUpdateForm = (data: FormData) => {
+    updateMutation.mutate(data);
+  };
 
   return (
     <>
@@ -255,10 +307,145 @@ const CustomerList = () => {
           </form>
         </Box>
       </Modal>
+
+      <Modal
+        open={openPopup2}
+        onClose={handleClosePopup2}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ mb: 2 }}
+          >
+            게시물 수정
+          </Typography>
+          <form onSubmit={handleSubmit(onUpdateForm)}>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: "name is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="name"
+                    variant="outlined"
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name.message : ""}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <Controller
+                name="age"
+                control={control}
+                rules={{ required: "age is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="age"
+                    variant="outlined"
+                    error={!!errors.age}
+                    helperText={errors.age ? errors.age.message : ""}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <Controller
+                name="sex"
+                control={control}
+                rules={{ required: "sex is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="sex"
+                    variant="outlined"
+                    error={!!errors.sex}
+                    helperText={errors.sex ? errors.sex.message : ""}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <Controller
+                name="university"
+                control={control}
+                rules={{ required: "university is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="university"
+                    variant="outlined"
+                    error={!!errors.university}
+                    helperText={
+                      errors.university ? errors.university.message : ""
+                    }
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <Controller
+                name="phone"
+                control={control}
+                rules={{ required: "phone is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="phone"
+                    variant="outlined"
+                    error={!!errors.phone}
+                    helperText={errors.phone ? errors.phone.message : ""}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <Controller
+                name="mail"
+                control={control}
+                rules={{ required: "mail is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="mail"
+                    variant="outlined"
+                    error={!!errors.mail}
+                    helperText={errors.mail ? errors.mail.message : ""}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type={"submit"}
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                Submit
+              </Button>
+            </Grid>
+          </form>
+        </Box>
+      </Modal>
+
       <Box component="main" sx={{ flexGrow: 1, mt: 15 }}>
         <Container maxWidth={false}>
           <Box sx={{ width: "100px", marginLeft: "auto" }}>
-            <Button variant="contained" onClick={handleOpenPopup}>
+            <Button variant="outlined" onClick={handleOpenPopup} fullWidth>
               추가
             </Button>
           </Box>
@@ -314,6 +501,7 @@ const CustomerList = () => {
                               variant="contained"
                               size="small"
                               color="info"
+                              onClick={() => handleOpenPopup2(item.id)}
                             >
                               수정
                             </Button>
