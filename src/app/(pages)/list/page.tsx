@@ -62,8 +62,8 @@ const CustomerList = () => {
   };
 
   const handleOpenPopup2 = (id: any) => {
+    setOpenPopup2(true);
     setUpdatedId(id);
-    setOpenPopup(true);
   };
 
   const handleClosePopup2 = () => {
@@ -156,6 +156,7 @@ const CustomerList = () => {
     mutationFn: (form: FormData) => boardUpdate(updatedId, form),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["board"] });
+      handleClosePopup2();
     },
     onError: (error) => {
       console.error("Error updating data:", error);
@@ -163,6 +164,7 @@ const CustomerList = () => {
   });
 
   const onUpdateForm = (data: FormData) => {
+    alert("수정되었습니다.");
     updateMutation.mutate(data);
   };
 
@@ -435,7 +437,7 @@ const CustomerList = () => {
                 color="primary"
                 fullWidth
               >
-                Submit
+                수정
               </Button>
             </Grid>
           </form>

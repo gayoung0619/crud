@@ -23,5 +23,5 @@ export const boardUpdate = async (
   id: string,
   form: FormData,
 ): Promise<AxiosResponse> => {
-  return await axios.patch(`http://localhost:3001/board/${id}`, form);
+  return await axios.put(`http://localhost:3001/board/${id}`, form);
 };

@@ -1,49 +1,22 @@
 {
   "board": [
     {
-      "id": "1",
-      "name": "권수빈",
+      "name": "권수빈22",
       "age": "15",
       "sex": "남",
       "university": "대학교",
       "phone": "010-0000-0000",
-      "mail": "abcd@naver.com"
+      "mail": "abcd@naver.com",
+      "id": "1"
     },
     {
-      "id": "2",
-      "name": "양가영",
+      "name": "양가영22",
       "age": "29",
       "sex": "여",
       "university": "대학교",
       "phone": "010-1111-2222",
-      "mail": "abcd@naver.com"
-    },
-    {
-      "id": "12333",
-      "name": "양가영",
-      "age": "50",
-      "sex": "여",
-      "university": "학교",
-      "phone": "01011112222",
-      "mail": "did-619@naver.com"
-    },
-    {
-      "id": "faf6",
-      "name": "양가영",
-      "age": "40",
-      "sex": "여",
-      "university": "학교",
-      "phone": "01088889999",
-      "mail": "did-619@naver.com"
-    },
-    {
-      "id": "9092",
-      "name": "dfdf",
-      "age": "dfdf",
-      "sex": "dfdfd",
-      "university": "fdfdf",
-      "phone": "dfdfd",
-      "mail": "did-619@naver.com"
+      "mail": "abcd@naver.com",
+      "id": "2"
     }
   ]
 }
