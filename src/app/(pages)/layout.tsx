@@ -1,10 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  QueryClientProvider,
-  QueryClient,
-  useQuery,
-} from "@tanstack/react-query";
+import React from "react";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import AuthToken from "../_component/authtoken";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 export default function RootLayout({

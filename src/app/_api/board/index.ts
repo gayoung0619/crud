@@ -8,3 +8,15 @@ export const boardFetch = async (): Promise<AxiosResponse> => {
 export const boardDelete = async (id: number): Promise<AxiosResponse> => {
   return await axios.delete(`http://localhost:3001/board/${id}`);
 };
+
+export const boardWrite = async (
+  form: boardResponse,
+): Promise<AxiosResponse> => {
+  return await axios.post("http://localhost:3001/board", form);
+};
+
+export const boardPatch = async (
+  form: boardResponse,
+): Promise<AxiosResponse> => {
+  return await axios.patch("http://localhost:3001/board", form);
+};
